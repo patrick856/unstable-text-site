@@ -76,6 +76,7 @@ function useAmbient(ref: RefObject<HTMLElement | null>, effects: Partial<Record<
       neonColor: RED,
       glowIntensity: "intense",
       neonGlitchChance: 0.45,
+      pauseOffscreen: false,
       effects,
     });
     scheduler.start();
@@ -97,6 +98,7 @@ function DemoCard({ demo, index }: { demo: (typeof demos)[number]; index: number
       maxConcurrent: 7,
       neonColor: RED,
       glowIntensity: "intense",
+      pauseOffscreen: false,
       effects: { [demo.effect]: 1 },
     });
     scheduler.start();
@@ -151,6 +153,7 @@ function SectionMarker({ number, label }: { number: string; label: string }) {
       maxConcurrent: 1,
       speedMultiplier: "FAST",
       neonColor: RED,
+      pauseOffscreen: false,
       effects: { fullScramble: 1 },
     });
     const breakScheduler = new AmbientGlitch.Scheduler({
@@ -161,6 +164,7 @@ function SectionMarker({ number, label }: { number: string; label: string }) {
       maxConcurrent: 1,
       speedMultiplier: "FAST",
       neonColor: RED,
+      pauseOffscreen: false,
       effects: { corruptChar: 1 },
     });
     numberScheduler.start();
