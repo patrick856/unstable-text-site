@@ -14,7 +14,7 @@ const demos: Array<{ label: string; effect: EffectName; text: string; config: st
   { label: "BLIP_CHAR", effect: "blipChar", text: "PACKET GHOST DETECTED", config: "trigger(el, 'blipChar', { duration: 1400 })" },
   { label: "SLOW_DECRYPT", effect: "fullScramble", text: "UNSEAL THE TRANSMISSION", config: "trigger(el, 'fullScramble', { speedMultiplier: 1.7 })" },
   { label: "WORD_SWAP", effect: "swapWords", text: "WORDS REFUSE STABLE ORDER", config: "trigger(el, 'swapWords', { duration: 1100 })" },
-  { label: "NEON_COLOR", effect: "neonColorChar", text: "RED CHANNEL OVERDRIVE", config: "trigger(el, 'neonColorChar', { neonColor: '#ff0055' })" },
+  { label: "JITTER_PULSE", effect: "jitterChar", text: "SIGNAL PHASE UNLOCKED", config: "trigger(el, 'jitterChar', { duration: 1200 })" },
 ];
 
 const quickStart = `import { AmbientGlitch } from 'unstable-text';
@@ -117,6 +117,50 @@ function DemoCard({ demo, index }: { demo: (typeof demos)[number]; index: number
   );
 }
 
+function SectionMarker({ number, label }: { number: string; label: string }) {
+  const numberRef = useRef<HTMLSpanElement>(null);
+  const breakRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const numberNode = numberRef.current;
+    const breakNode = breakRef.current;
+    if (!numberNode || !breakNode) return;
+
+    const numberScheduler = new AmbientGlitch.Scheduler({
+      container: numberNode,
+      minInterval: 900,
+      maxInterval: 2200,
+      nodeCooldown: 700,
+      maxConcurrent: 1,
+      speedMultiplier: "FAST",
+      effects: { fullScramble: 1 },
+    });
+    const breakScheduler = new AmbientGlitch.Scheduler({
+      container: breakNode,
+      minInterval: 1300,
+      maxInterval: 2800,
+      nodeCooldown: 900,
+      maxConcurrent: 1,
+      speedMultiplier: "FAST",
+      effects: { corruptChar: 1 },
+    });
+    numberScheduler.start();
+    breakScheduler.start();
+    return () => {
+      numberScheduler.destroy();
+      breakScheduler.destroy();
+    };
+  }, []);
+
+  return (
+    <p className="section-marker">
+      <span ref={numberRef} data-glitch-effects="fullScramble">{number}</span>
+      <span ref={breakRef} className="section-break" data-glitch-effects="corruptChar" aria-hidden="true">�</span>
+      <span>{label}</span>
+    </p>
+  );
+}
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -159,7 +203,7 @@ function Index() {
       </header>
 
       <section className="section showcase-section" aria-labelledby="showcase-title">
-        <div className="section-heading"><p>01 / LIVE SIGNALS</p><h2 id="showcase-title">Every sample is running now.</h2><span>Click any signal to fire it again.</span></div>
+        <div className="section-heading"><SectionMarker number="01" label="LIVE SIGNALS" /><h2 id="showcase-title">Every sample is running now.</h2><span>Click any signal to fire it again.</span></div>
         <div className="demo-grid">{demos.map((demo, index) => <DemoCard key={demo.effect} demo={demo} index={index} />)}</div>
       </section>
 
@@ -170,7 +214,7 @@ function Index() {
       </section>
 
       <section className="section usage-section" aria-labelledby="usage-title">
-        <div className="section-heading"><p>02 / QUICK START</p><h2 id="usage-title">A few lines. Then let it drift.</h2><a href={`${GITHUB_URL}#readme`} target="_blank" rel="noreferrer">Full README <ExternalLink /></a></div>
+        <div className="section-heading"><SectionMarker number="02" label="QUICK START" /><h2 id="usage-title">A few lines. Then let it drift.</h2><a href={`${GITHUB_URL}#readme`} target="_blank" rel="noreferrer">Full README <ExternalLink /></a></div>
         <div className="code-grid">
           <div className="code-panel"><div className="panel-top"><span>ambient.js</span><CopyButton value={quickStart} /></div><pre><code>{quickStart}</code></pre></div>
           <div className="code-panel"><div className="panel-top"><span>manual-trigger.js</span><CopyButton value={manualStart} /></div><pre><code>{manualStart}</code></pre></div>
@@ -178,7 +222,7 @@ function Index() {
       </section>
 
       <section className="section customize-section" aria-labelledby="customize-title">
-        <div className="section-heading"><p>03 / TUNE THE NOISE</p><h2 id="customize-title">Controlled instability.</h2></div>
+        <div className="section-heading"><SectionMarker number="03" label="TUNE THE NOISE" /><h2 id="customize-title">Controlled instability.</h2></div>
         <div className="feature-list">
           {[['SPEED', 'Five presets from VERY_FAST to VERY_SLOW.'], ['WEIGHTS', 'Shape the mix by weighting individual effects.'], ['NEON', 'Preset or custom colors with adjustable glow intensity.'], ['OVERRIDES', 'Use data-glitch-* attributes on individual elements.'], ['MOTION', 'Reduced-motion preferences are respected automatically.']].map(([title, copy], index) => (
             <div className="feature-row" key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></div>

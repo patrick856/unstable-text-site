@@ -95,6 +95,9 @@ h1 { margin: 0; max-width: 100%; font: 500 clamp(4.1rem, 11.6vw, 10rem)/.8 var(-
 .section { padding: 112px 0; border-top: 1px solid var(--border); }
 .section-heading { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 30px; align-items: end; margin-bottom: 56px; }
 .section-heading > p { margin: 0; align-self: start; }
+.section-marker { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.section-marker > span:first-child { min-width: 2ch; color: var(--foreground); }
+.section-break { display: inline-grid; width: 1.25rem; height: 1.25rem; place-items: center; color: var(--signal); border: 1px solid var(--signal); background: var(--signal-soft); text-shadow: var(--glow-signal); }
 .section-heading h2 { margin: 0; font: 500 clamp(2rem, 4vw, 4.4rem)/1 var(--font-mono); letter-spacing: 0; }
 .section-heading > span, .section-heading > a { color: var(--muted-foreground); font: 400 12px/1.5 var(--font-mono); justify-self: end; text-align: right; }
 .section-heading > a { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; }
