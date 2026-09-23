@@ -33,7 +33,18 @@ const manualStart = `AmbientGlitch.trigger(element, 'neonColorChar', {
 function CopyButton({ value, label = "Copy code" }: { value: string; label?: string }) {
   const [copied, setCopied] = useState(false);
   const copy = useCallback(async () => {
-    await navigator.clipboard.writeText(value);
+    try {
+      await navigator.clipboard.writeText(value);
+    } catch {
+      const input = document.createElement("textarea");
+      input.value = value;
+      input.style.position = "fixed";
+      input.style.opacity = "0";
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      input.remove();
+    }
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1600);
   }, [value]);
@@ -87,12 +98,11 @@ function DemoCard({ demo, index }: { demo: (typeof demos)[number]; index: number
 
   const run = () => {
     if (!target.current) return;
-    void AmbientGlitch.trigger(target.current, demo.effect, {
-      duration: demo.effect === "fullScramble" ? undefined : 1200,
-      speedMultiplier: demo.effect === "fullScramble" ? "SLOW" : "FAST",
-      neonColor: RED,
-      glowIntensity: "intense",
-    });
+    const shared = { neonColor: RED, glowIntensity: "intense" as const };
+    const options = demo.effect === "fullScramble"
+      ? { ...shared, speedMultiplier: "SLOW" as const }
+      : { ...shared, duration: 1200, speedMultiplier: "FAST" as const };
+    void AmbientGlitch.trigger(target.current, demo.effect, options);
   };
 
   return (
