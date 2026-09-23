@@ -49,7 +49,14 @@ function CopyButton({ value, label = "Copy code" }: { value: string; label?: str
     window.setTimeout(() => setCopied(false), 1600);
   }, [value]);
   return (
-    <Button variant="ghost" size="icon" onClick={copy} aria-label={copied ? "Copied" : label} title={copied ? "Copied" : label}>
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={copy}
+      aria-label={copied ? "Copied" : label}
+      title={copied ? "Copied" : label}
+      className="!h-8 !w-8 !p-0 shrink-0 rounded-sm border border-[var(--signal)] bg-[var(--signal-soft)] text-[var(--signal)] shadow-[0_0_10px_var(--signal-soft)]"
+    >
       {copied ? <Check /> : <Clipboard />}
     </Button>
   );
@@ -143,6 +150,7 @@ function SectionMarker({ number, label }: { number: string; label: string }) {
       nodeCooldown: 700,
       maxConcurrent: 1,
       speedMultiplier: "FAST",
+      neonColor: RED,
       effects: { fullScramble: 1 },
     });
     const breakScheduler = new AmbientGlitch.Scheduler({
@@ -152,6 +160,7 @@ function SectionMarker({ number, label }: { number: string; label: string }) {
       nodeCooldown: 900,
       maxConcurrent: 1,
       speedMultiplier: "FAST",
+      neonColor: RED,
       effects: { corruptChar: 1 },
     });
     numberScheduler.start();
