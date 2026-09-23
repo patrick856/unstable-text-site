@@ -243,7 +243,7 @@ function Index() {
       <footer>
         <div className="footer-brand" data-glitch-effects="neonColorChar">unstable-text<span aria-hidden="true">_</span></div>
         <div className="footer-links"><a href={GITHUB_URL} target="_blank" rel="noreferrer">GitHub</a><a href={NPM_URL} target="_blank" rel="noreferrer">npm</a><span>MIT License</span></div>
-        <p>Built by Patrick Marcus / SilentRose Studio</p>
+        <p>Built by Patrick Marcus</p>
       </footer>
     </main>
   );
