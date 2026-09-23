@@ -10,11 +10,11 @@ const GITHUB_URL = "https://github.com/patrick856/unstable-text";
 const RED = "#ff0055";
 
 const demos: Array<{ label: string; effect: EffectName; text: string; config: string }> = [
-  { label: "CORRUPT_CHAR", effect: "corruptChar", text: "SIGNAL INTEGRITY: 71.4%", config: "trigger(el, 'corruptChar', { duration: 900 })" },
-  { label: "BLIP_CHAR", effect: "blipChar", text: "PACKET GHOST DETECTED", config: "trigger(el, 'blipChar', { duration: 1400 })" },
+  { label: "CORRUPT_CHAR", effect: "corruptChar", text: "SIGNAL INTEGRITY: 71.4%", config: "trigger(el, 'corruptChar', { duration: 1800 })" },
+  { label: "BLIP_CHAR", effect: "blipChar", text: "PACKET GHOST DETECTED", config: "trigger(el, 'blipChar', { duration: 2800 })" },
   { label: "SLOW_DECRYPT", effect: "fullScramble", text: "UNSEAL THE TRANSMISSION", config: "trigger(el, 'fullScramble', { speedMultiplier: 1.7 })" },
-  { label: "WORD_SWAP", effect: "swapWords", text: "WORDS REFUSE STABLE ORDER", config: "trigger(el, 'swapWords', { duration: 1100 })" },
-  { label: "JITTER_PULSE", effect: "jitterChar", text: "SIGNAL PHASE UNLOCKED", config: "trigger(el, 'jitterChar', { duration: 1200 })" },
+  { label: "WORD_SWAP", effect: "swapWords", text: "WORDS REFUSE STABLE ORDER", config: "trigger(el, 'swapWords', { duration: 2200 })" },
+  { label: "JITTER_PULSE", effect: "jitterChar", text: "SIGNAL PHASE UNLOCKED", config: "trigger(el, 'jitterChar', { duration: 2400 })" },
 ];
 
 const quickStart = `import { AmbientGlitch } from 'unstable-text';
@@ -101,7 +101,17 @@ function DemoCard({ demo, index }: { demo: (typeof demos)[number]; index: number
     const shared = { neonColor: RED, glowIntensity: "intense" as const };
     const options = demo.effect === "fullScramble"
       ? { ...shared, speedMultiplier: "SLOW" as const }
-      : { ...shared, duration: 1200, speedMultiplier: "FAST" as const };
+      : {
+          ...shared,
+          duration: demo.effect === "corruptChar"
+            ? 1800
+            : demo.effect === "blipChar"
+              ? 2800
+              : demo.effect === "swapWords"
+                ? 2200
+                : 2400,
+          speedMultiplier: "FAST" as const,
+        };
     void AmbientGlitch.trigger(target.current, demo.effect, options);
   };
 
